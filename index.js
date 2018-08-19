@@ -17,11 +17,14 @@ function guid() {
 var createTask = function(task) {
     var creationDate = new Date();
     
-    var id = Math.floor(creationDate.getTime() / 1000);
-
+    var id = Math.floor((creationDate.getTime() / 1000) % 1000);
+    
     storage.retrieveTasksFromDisk(function(tasks) {
-        task.id = id;
-        task.creationDate = creationDate.toUTCString();
+        task["id"] = id;
+        task["creationDate"] = creationDate.toUTCString();
+        if(!tasks) {
+            tasks = {};
+        }
         tasks[task.id] = task;
         storage.writeBackToFile(tasks);
     },
@@ -47,7 +50,6 @@ var updateTask = function(id, status) {
 };
 
 var listTasks = function (showAll) {
-    console.log(showAll);
     var keys = ["id", "title"];
 
     storage.retrieveTasksFromDisk(function(tasks) {
@@ -64,8 +66,8 @@ var listTasks = function (showAll) {
                     print("green", line);
                 }
             } else {
-                console.log(line);
-                // print("white", line);
+                // console.log(line);
+                print("white", line);
             }
         }
     },
@@ -85,26 +87,29 @@ var deleteTask = function (id) {
     })
 };
 
+var deleteAll = function() {
+    storage.writeBackToFile("");
+}
+
 /** Utilities */
 var sortByStatus = function(tasks) {
     tasks.sort(function(a, b) {
-
     });
 }
 
 /** Cli interaction */
-program.command("ls").alias("-l").description("list tasks")
+program.command("list").alias("ls").description("list tasks")
     .action(function(args) {
         var showAll = args;
         listTasks(showAll);
     });
     
-program.command("rm").alias("-r").description("delete tasks")
+program.command("remove").alias("rm").description("delete tasks")
     .action(function(taskId) {
         deleteTask(taskId);
     });
 
-program.command("c").alias("-c").description("create tasks")
+program.command("create").alias("c").description("create tasks")
     .action(function(title) {
         console.log("tasks: " + title);
         createTask({
@@ -113,16 +118,21 @@ program.command("c").alias("-c").description("create tasks")
         });
     });
 
-program.command("d").alias("-t").description("marks status done")
+program.command("done").alias("d").description("marks status done")
     .action(function(args) {
         var id = args; 
         updateTask(id, "DONE");
     });
 
-program.command("nd").alias("-nd").description("marks status done")
+program.command("notDone").alias("nd").description("marks status as not done done")
     .action(function(args) {
         var id = args; 
-        updateTask(id, "CREATED");
+        updateTask(id, "OPEN");
+    });
+
+program.command("deleteAll").description("deleteAll")
+    .action(function() {
+        deleteAll();
     });
 
 program.parse(process.argv);
