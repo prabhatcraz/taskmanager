@@ -1,0 +1,18 @@
+{
+  "bin": {
+    "intellido": "index.js"
+  },
+  "name": "intellido",
+  "version": "1.0.0",
+  "description": "commandline tool to manage tasks",
+  "main": "index.js",
+  "author": "Prabhat Ranjan <prabhat.ranjan@ing.com>",
+  "license": "MIT",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "commander": "^2.17.1",
+    "dotenv": "^6.0.0"
+  }
+}

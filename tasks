@@ -1,0 +1,126 @@
+'use strict';
+
+var fs = require("fs");
+const program = require('commander');
+
+const homedir = require('os').homedir();
+const taskFile = homedir  + "/tasks.json";
+
+function guid() {
+    function s4() {
+      return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
+    }
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+  }
+
+var ceateTask = function(task) {
+    retrieveTasksFromDisk(function(tasks) {
+        task.id = guid();
+        tasks[task.id] = task;
+        writeBackToFile(tasks);
+    },
+    function() {
+        console.log("Task creation failed, could not write into file");
+    })
+}
+
+var updateTask = function(id, status) {
+    retrieveTasksFromDisk(function(tasks) {
+        for(var key in tasks) {
+            if (key == id) {
+                tasks[id].status = status;
+                fs.writeFile( taskFile, JSON.stringify(tasks), function (err) {
+                    if(err) {
+                        console.log("Task Update failed !!" + err);
+                    } else {
+                        console.log("Task Update Success !!");
+                    }
+                });
+            }
+        }
+    },
+    function() {
+        console.log("Writing to file failed");
+    });
+}
+
+var listTasks = function () {
+    fs.readFile( taskFile, 'utf8', function (err, data) {
+        if(data)  {
+            var tasks = JSON.parse(data);
+            var i = 1;
+            for(var key in tasks) {
+                var task = tasks[key];
+                console.log(i++ + "." + task.title + " : " + task.status);
+            };
+        }
+    });
+}
+
+var deleteTasks = function () {
+    fs.readFile( taskFile, 'utf8', function (err, data) {
+        if(data)  {
+            var tasks = JSON.parse(data);
+            var i = 1;
+            for(var key in tasks) {
+                delete tasks[key];
+            };
+
+            writeBackToFile(tasks);
+        }
+    });
+}
+
+/** file management */
+var retrieveTasksFromDisk = function (success, failure) {
+    fs.readFile( taskFile, 'utf8', function (err, data) {
+        if(err) {
+            failure();
+            return;
+        }
+        var tasks = {};
+        if(data) {
+            tasks = JSON.parse(data);
+        }
+        success(tasks);
+    });
+}
+var writeBackToFile = function(tasks) {
+    fs.writeFile( taskFile, JSON.stringify(tasks), function (err) {
+        if(err) {
+            console.log("Task Update failed !!" + err);
+        } else {
+            console.log("Task Update Success !!");
+        }
+    });
+}
+ceateTask({
+    "title" : "some task",
+    "status" : "OPEN"
+});
+
+listTasks();
+
+updateTask("77968583-daeb-acd3-591a-2b7dd06a2449", "DONE");
+
+
+
+setTimeout(function() {
+}, 3000);
+
+/** Cli interaction */
+program
+  .version('0.1.0')
+  .option('-a, --add', 'Add task')
+  .option('-l, --list', 'list tasks')
+  .parse(process.argv);
+
+if(program.add) {
+    console.log("Add a task");
+} 
+
+if(program.list) {
+    cosole.log("tasks are:");
+}
