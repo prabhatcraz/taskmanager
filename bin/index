@@ -1,0 +1,52 @@
+#!/usr/bin/env node
+
+'use strict';
+
+const program = require('commander');
+const taskmanager = require('../lib/taskmanager');
+
+/** Utilities */
+var sortByStatus = function(tasks) {
+    tasks.sort(function(a, b) {
+    });
+}
+
+/** Cli interaction */
+program.command("list").alias("ls").description("list tasks")
+    .action(function(args) {
+        var showAll = args;
+        taskmanager.listTasks(showAll);
+    });
+    
+program.command("remove").alias("rm").description("delete tasks")
+    .action(function(taskId) {
+        taskmanager.deleteTask(taskId);
+    });
+
+program.command("create").alias("c").description("create tasks")
+    .action(function(title) {
+        console.log("tasks: " + title);
+        taskmanager.createTask({
+            "title" : title,
+            "status" : "OPEN"
+        });
+    });
+
+program.command("done").alias("d").description("marks status done")
+    .action(function(args) {
+        var id = args; 
+        taskmanager.updateTask(id, "DONE");
+    });
+
+program.command("notDone").alias("nd").description("marks status as not done done")
+    .action(function(args) {
+        var id = args; 
+        taskmanager.updateTask(id, "OPEN");
+    });
+
+program.command("deleteAll").description("deleteAll")
+    .action(function() {
+        taskmanager.deleteAll();
+    });
+
+program.parse(process.argv);
