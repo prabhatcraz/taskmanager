@@ -18,12 +18,12 @@ program.command("list").alias("ls").description("list tasks")
         taskmanager.listTasks(showAll);
     });
     
-program.command("remove").alias("rm").description("delete tasks")
+program.command("remove").alias("rm").description("delete a task")
     .action(function(taskId) {
         taskmanager.deleteTask(taskId);
     });
 
-program.command("create").alias("c").description("create tasks")
+program.command("create").alias("c").description("create a task")
     .action(function(title) {
         console.log("tasks: " + title);
         taskmanager.createTask({
@@ -32,21 +32,32 @@ program.command("create").alias("c").description("create tasks")
         });
     });
 
-program.command("done").alias("d").description("marks status done")
+program.command("done").alias("d").description("mark a task done")
     .action(function(args) {
         var id = args; 
         taskmanager.updateTask(id, "DONE");
     });
 
-program.command("notDone").alias("nd").description("marks status as not done done")
+program.command("notDone").alias("nd").description("mark a task not done.")
     .action(function(args) {
         var id = args; 
         taskmanager.updateTask(id, "OPEN");
     });
 
-program.command("deleteAll").description("deleteAll")
+program.command("resetAll").description("deleteAll")
     .action(function() {
+
         taskmanager.deleteAll();
+        taskmanager.resetTaskCounter();
     });
 
+program.on('--help', function(){
+        console.log('  Examples:');
+        console.log('');
+        console.log('    $ tm --help');
+        console.log('    $ tm c <<task title>>');
+        console.log('    $ tm d <<task title>> # to mark done');
+        console.log('');
+      });
+      
 program.parse(process.argv);
