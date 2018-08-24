@@ -32,10 +32,7 @@ program.command("create").alias("c").description("create a task")
         });
     });
 
-program.on("-d", function(args) {
-    var id = args; 
-    taskmanager.updateTask(id, "DONE");
-}).command("done").alias("d").description("mark a task done")
+program.command("done").alias("d").description("mark a task done")
     .action(function(args) {
         var id = args; 
         taskmanager.updateTask(id, "DONE");
@@ -58,8 +55,8 @@ program.on('--help', function(){
         console.log('  Examples:');
         console.log('');
         console.log('    $ tm --help');
-        console.log('    $ tm c <<task title>>');
-        console.log('    $ tm d <<task id>> # Task id is the number in brackets after task title.   ');
+        console.log('    $ tm c <<task title>> ');
+        console.log('    $ tm d <<task id>> # Task id is the number in brackets after task title');
         console.log('');
       });
       
