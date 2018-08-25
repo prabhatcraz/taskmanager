@@ -4,18 +4,12 @@
 
 const program = require('commander');
 const taskmanager = require('../lib/taskmanager');
-
-/** Utilities */
-var sortByStatus = function(tasks) {
-    tasks.sort(function(a, b) {
-    });
-}
+const lister = require('../lib/lister');
 
 /** Cli interaction */
 program.command("list").alias("ls").description("list tasks")
     .action(function(args) {
-        var showAll = args;
-        taskmanager.listTasks(showAll);
+        lister.listTasks(args);
     });
     
 program.command("remove").alias("rm").description("delete a task")
@@ -46,7 +40,6 @@ program.command("notDone").alias("nd").description("mark a task not done.")
 
 program.command("resetAll").description("deleteAll")
     .action(function() {
-
         taskmanager.deleteAll();
         taskmanager.resetTaskCounter();
     });
