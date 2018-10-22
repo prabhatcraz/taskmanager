@@ -3,7 +3,7 @@
     "tm": "bin/index"
   },
   "name": "task-commando",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "commandline tool to manage tasks",
   "main": "index.js",
   "author": "Prabhat Ranjan <prabhatcraz@gmail.com>",

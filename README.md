@@ -1,6 +1,11 @@
 ## Command line TaskManager
 A command line task manager written in nodejs.
 
+install with -g to use it directly
+```
+npm i -g task-commando
+```
+
 ```
 Options:
 
