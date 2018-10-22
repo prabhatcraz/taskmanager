@@ -11,7 +11,7 @@ program.command("list").alias("ls").description("list tasks")
     .action(function(args) {
         lister.listTasks(args);
     });
-    
+
 program.command("remove").alias("rm").description("delete a task")
     .action(function(taskId) {
         taskmanager.deleteTask(taskId);
@@ -28,20 +28,19 @@ program.command("create").alias("c").description("create a task")
 
 program.command("done").alias("d").description("mark a task done")
     .action(function(args) {
-        var id = args; 
+        var id = args;
         taskmanager.updateTask(id, "DONE");
     });
 
 program.command("notDone").alias("nd").description("mark a task not done.")
     .action(function(args) {
-        var id = args; 
+        var id = args;
         taskmanager.updateTask(id, "OPEN");
     });
 
 program.command("resetAll").description("deleteAll")
     .action(function() {
         taskmanager.deleteAll();
-        taskmanager.resetTaskCounter();
     });
 
 program.on('--help', function(){
@@ -52,5 +51,5 @@ program.on('--help', function(){
         console.log('    $ tm d <<task id>> # Task id is the number in brackets after task title');
         console.log('');
       });
-      
+
 program.parse(process.argv);
