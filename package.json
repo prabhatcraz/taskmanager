@@ -2,7 +2,7 @@
   "bin": {
     "tm": "bin/index"
   },
-  "name": "task-manager",
+  "name": "task-commando",
   "version": "1.0.0",
   "description": "commandline tool to manage tasks",
   "main": "index.js",
